@@ -7,13 +7,15 @@
 
 <style>
 :root{
-    --primary: #f57c00;
-    --primary-dark: #e06b00;
+    --primary: #c0631a;
+    --primary-dark: #a04f12;
     --secondary: #2e7d32;
     --secondary-dark: #1f5c23;
     --dark: #1f2937;
     --darker: #14181f;
     --light: #f8f9fa;
+    --paper: #ffffff;
+    --line: #e3e6ea;
     --white: #ffffff;
     --gray: #666;
 }
@@ -32,6 +34,7 @@ html{
 body{
     line-height:1.6;
     color:#333;
+    background:var(--paper);
 }
 
 img{
@@ -291,7 +294,7 @@ header.main-header{
     color:var(--dark);
 }
 
-/* ===== HERO — animated background slideshow ===== */
+/* ===== HERO — animated rotating image showcase ===== */
 .hero{
     min-height:92vh;
     display:flex;
@@ -302,13 +305,64 @@ header.main-header{
     background:var(--darker);
 }
 
-.hero-bg{
+.hero-slideshow{
     position:absolute;
     inset:0;
     z-index:0;
-    background-image:url('hero-mixer.jpeg');
+}
+
+.hero-slide{
+    position:absolute;
+    inset:0;
     background-size:cover;
     background-position:center right;
+    opacity:0;
+    animation:heroFade 28s infinite;
+    will-change:opacity, transform;
+}
+
+.hero-slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center right;
+    transform:scale(1.08);
+    animation:heroDrift 28s infinite;
+}
+
+.hero-slide:nth-child(1){ animation-delay:0s; }
+.hero-slide:nth-child(2){ animation-delay:4s; }
+.hero-slide:nth-child(3){ animation-delay:8s; }
+.hero-slide:nth-child(4){ animation-delay:12s; }
+.hero-slide:nth-child(5){ animation-delay:16s; }
+.hero-slide:nth-child(6){ animation-delay:20s; }
+.hero-slide:nth-child(7){ animation-delay:24s; }
+
+.hero-slide:nth-child(1) img{ animation-delay:0s; }
+.hero-slide:nth-child(2) img{ animation-delay:4s; }
+.hero-slide:nth-child(3) img{ animation-delay:8s; }
+.hero-slide:nth-child(4) img{ animation-delay:12s; }
+.hero-slide:nth-child(5) img{ animation-delay:16s; }
+.hero-slide:nth-child(6) img{ animation-delay:20s; }
+.hero-slide:nth-child(7) img{ animation-delay:24s; }
+
+@keyframes heroFade{
+    0%{ opacity:0; }
+    3%{ opacity:1; }
+    14%{ opacity:1; }
+    17%{ opacity:0; }
+    100%{ opacity:0; }
+}
+
+@keyframes heroDrift{
+    0%{ transform:scale(1.08) translate(0,0); }
+    100%{ transform:scale(1.16) translate(-1.5%, -1%); }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .hero-slide, .hero-slide img{ animation:none; }
+    .hero-slide{ opacity:0; }
+    .hero-slide:first-child{ opacity:1; }
 }
 
 .hero-scrim{
@@ -316,7 +370,7 @@ header.main-header{
     inset:0;
     z-index:1;
     background:
-        linear-gradient(100deg, rgba(10,12,16,.88) 0%, rgba(10,12,16,.7) 28%, rgba(10,12,16,.32) 52%, rgba(10,12,16,.08) 68%, rgba(10,12,16,0) 100%),
+        linear-gradient(100deg, rgba(10,12,16,.90) 0%, rgba(10,12,16,.74) 28%, rgba(10,12,16,.38) 52%, rgba(10,12,16,.12) 68%, rgba(10,12,16,0) 100%),
         linear-gradient(to top, rgba(8,10,13,.55) 0%, rgba(8,10,13,0) 30%);
 }
 
@@ -467,8 +521,9 @@ header.main-header{
     width:42px;
     height:42px;
     flex-shrink:0;
-    background:rgba(255,255,255,.15);
-    border-radius:50%;
+    background:transparent;
+    border:1.5px solid rgba(255,255,255,.55);
+    border-radius:8px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -584,6 +639,7 @@ section{
 
 .mini-stat{
     background:var(--light);
+    border:1px solid var(--line);
     border-radius:8px;
     padding:16px 10px;
     text-align:center;
@@ -646,16 +702,17 @@ section{
     width:58px;
     height:58px;
     margin:0 auto 20px;
-    background:var(--light);
-    border-radius:12px;
+    background:transparent;
+    border:1.5px solid var(--line);
+    border-radius:10px;
     display:flex;
     align-items:center;
     justify-content:center;
 }
 
 .service-icon .icon{
-    width:28px;
-    height:28px;
+    width:26px;
+    height:26px;
     color:var(--secondary);
 }
 
@@ -670,7 +727,7 @@ section{
     font-size:.95rem;
 }
 
-/* ===== Products / Projects grid (20 items) ===== */
+/* ===== Products / Projects grid (15 items) ===== */
 .product-grid{
     display:grid;
     grid-template-columns:repeat(5,1fr);
@@ -679,16 +736,17 @@ section{
 
 .product-card{
     background:white;
+    border:1px solid var(--line);
     border-radius:10px;
     overflow:hidden;
-    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+    box-shadow:0 5px 15px rgba(0,0,0,0.06);
     transition:.3s;
     text-align:center;
 }
 
 .product-card:hover{
     transform:translateY(-5px);
-    box-shadow:0 15px 30px rgba(0,0,0,.12);
+    box-shadow:0 15px 30px rgba(0,0,0,.1);
 }
 
 .product-img{
@@ -719,10 +777,17 @@ section{
     margin-top:45px;
 }
 
-/* ===== Feature strip (dark) ===== */
+/* ===========================================================
+   FROM THIS POINT ON — clean / light section theme
+   (feature strip, CTA bar, contact, footer)
+   =========================================================== */
+
+/* ===== Feature strip — now light ===== */
 .feature-strip{
-    background:var(--darker);
-    color:white;
+    background:var(--paper);
+    color:var(--dark);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
 }
 
 .feature-strip .container{
@@ -740,7 +805,8 @@ section{
     width:50px;
     height:50px;
     flex-shrink:0;
-    background:var(--primary);
+    background:transparent;
+    border:1.5px solid var(--line);
     border-radius:8px;
     display:flex;
     align-items:center;
@@ -750,22 +816,24 @@ section{
 .feature-icon .icon{
     width:24px;
     height:24px;
-    color:white;
+    color:var(--primary);
 }
 
 .feature-item h4{
     font-size:1rem;
     margin-bottom:6px;
+    color:var(--dark);
 }
 
 .feature-item p{
     font-size:.85rem;
-    color:#b9bec7;
+    color:var(--gray);
 }
 
-/* ===== CTA bar (orange) ===== */
+/* ===== CTA bar — now light, orange as accent only ===== */
 .cta-bar{
-    background:var(--primary);
+    background:var(--light);
+    border-bottom:1px solid var(--line);
     padding:40px 0;
 }
 
@@ -775,7 +843,7 @@ section{
     align-items:center;
     flex-wrap:wrap;
     gap:20px;
-    color:white;
+    color:var(--dark);
 }
 
 .cta-text{
@@ -788,7 +856,8 @@ section{
     width:54px;
     height:54px;
     flex-shrink:0;
-    background:rgba(255,255,255,.18);
+    background:var(--paper);
+    border:1.5px solid var(--primary);
     border-radius:10px;
     display:flex;
     align-items:center;
@@ -798,22 +867,24 @@ section{
 .cta-icon .icon{
     width:26px;
     height:26px;
-    color:white;
+    color:var(--primary);
 }
 
 .cta-text h3{
     font-size:1.3rem;
     margin-bottom:4px;
+    color:var(--dark);
 }
 
 .cta-text p{
     font-size:.9rem;
-    color:#ffe7c8;
+    color:var(--gray);
 }
 
 .whatsapp-btn{
-    background:#1ea952;
-    color:white;
+    background:transparent;
+    border:1.5px solid #1ea952;
+    color:#178a43;
     padding:13px 28px;
     border-radius:6px;
     text-decoration:none;
@@ -830,12 +901,13 @@ section{
 }
 
 .whatsapp-btn:hover{
-    background:#178a43;
+    background:#1ea952;
+    color:white;
 }
 
 /* ===== Contact ===== */
 .contact{
-    background:var(--light);
+    background:var(--paper);
 }
 
 .contact-wrapper{
@@ -856,10 +928,11 @@ section{
 }
 
 .contact-form{
-    background:white;
+    background:var(--light);
+    border:1px solid var(--line);
     padding:30px;
     border-radius:10px;
-    box-shadow:0 5px 20px rgba(0,0,0,.06);
+    box-shadow:0 5px 20px rgba(0,0,0,.04);
 }
 
 .contact-form input,
@@ -870,6 +943,7 @@ section{
     border:1px solid #ccc;
     border-radius:5px;
     font-size:.95rem;
+    background:white;
 }
 
 .contact-form button{
@@ -888,8 +962,9 @@ section{
     position:fixed;
     bottom:25px;
     right:25px;
-    background:#1ea952;
-    color:white;
+    background:white;
+    border:1.5px solid #1ea952;
+    color:#1ea952;
     width:56px;
     height:56px;
     border-radius:50%;
@@ -897,7 +972,7 @@ section{
     align-items:center;
     justify-content:center;
     text-decoration:none;
-    box-shadow:0 6px 18px rgba(0,0,0,.25);
+    box-shadow:0 6px 18px rgba(0,0,0,.15);
     z-index:999;
     transition:.3s;
 }
@@ -908,14 +983,16 @@ section{
 }
 
 .whatsapp-float:hover{
-    background:#178a43;
+    background:#1ea952;
+    color:white;
     transform:scale(1.08);
 }
 
-/* ===== Footer ===== */
+/* ===== Footer — now light ===== */
 footer{
-    background:var(--darker);
-    color:#cfd3d8;
+    background:var(--light);
+    color:var(--gray);
+    border-top:1px solid var(--line);
     padding:60px 0 0;
 }
 
@@ -924,11 +1001,11 @@ footer{
     grid-template-columns:1.4fr 1fr 1fr 1.2fr;
     gap:40px;
     padding-bottom:40px;
-    border-bottom:1px solid rgba(255,255,255,.1);
+    border-bottom:1px solid var(--line);
 }
 
 .footer-brand .logo{
-    color:white;
+    color:var(--dark);
     margin-bottom:14px;
 }
 
@@ -938,7 +1015,7 @@ footer{
 
 .footer-brand p{
     font-size:.9rem;
-    color:#9aa0a8;
+    color:var(--gray);
     margin-bottom:18px;
 }
 
@@ -948,9 +1025,10 @@ footer{
     justify-content:center;
     width:36px;
     height:36px;
-    background:rgba(255,255,255,.08);
+    background:transparent;
+    border:1.5px solid var(--line);
     border-radius:50%;
-    color:white;
+    color:var(--dark);
     margin-right:10px;
     text-decoration:none;
     transition:.3s;
@@ -962,11 +1040,12 @@ footer{
 }
 
 .footer-social a:hover{
-    background:var(--primary);
+    border-color:var(--primary);
+    color:var(--primary);
 }
 
 footer h4{
-    color:white;
+    color:var(--dark);
     margin-bottom:18px;
     font-size:1.05rem;
 }
@@ -980,7 +1059,7 @@ footer ul li{
 }
 
 footer ul li a{
-    color:#9aa0a8;
+    color:var(--gray);
     text-decoration:none;
     font-size:.9rem;
     transition:.3s;
@@ -995,7 +1074,7 @@ footer ul li a:hover{
     gap:12px;
     align-items:flex-start;
     font-size:.9rem;
-    color:#9aa0a8;
+    color:var(--gray);
 }
 
 .footer-contact .icon{
@@ -1010,7 +1089,7 @@ footer ul li a:hover{
     text-align:center;
     padding:22px 0;
     font-size:.85rem;
-    color:#7a8088;
+    color:#9aa0a8;
 }
 
 /* ===== Responsive ===== */
@@ -1187,9 +1266,17 @@ footer ul li a:hover{
     </div>
 </header>
 
-<!-- Hero -->
+<!-- Hero — animated 7-image showcase -->
 <section class="hero" id="home">
-    <div class="hero-bg"></div>
+    <div class="hero-slideshow">
+        <div class="hero-slide"><img src="hero-mixer.jpeg" alt="Concrete mixer in operation"></div>
+        <div class="hero-slide"><img src="13.jpeg" alt="Batching plant"></div>
+        <div class="hero-slide"><img src="14.jpeg" alt="Concrete pump"></div>
+        <div class="hero-slide"><img src="9.jpeg" alt="Site dumper"></div>
+        <div class="hero-slide"><img src="18.jpeg" alt="Road roller"></div>
+        <div class="hero-slide"><img src="8.jpeg" alt="Rebar bending machine"></div>
+        <div class="hero-slide"><img src="11.jpeg" alt="Block making machine"></div>
+    </div>
     <div class="hero-scrim"></div>
 
     <div class="container">
@@ -1318,7 +1405,7 @@ footer ul li a:hover{
     </div>
 </section>
 
-<!-- Products (20-item grid) -->
+<!-- Products (15-item grid) -->
 <section id="products">
     <div class="container">
         <div class="section-title">
@@ -1396,7 +1483,7 @@ footer ul li a:hover{
     </div>
 </section>
 
-<!-- Feature strip -->
+<!-- Feature strip — light from here onward -->
 <div class="feature-strip">
     <div class="container">
         <div class="feature-item">
@@ -1430,7 +1517,7 @@ footer ul li a:hover{
     </div>
 </div>
 
-<!-- CTA bar -->
+<!-- CTA bar — light -->
 <div class="cta-bar">
     <div class="container">
         <div class="cta-text">
@@ -1483,7 +1570,7 @@ footer ul li a:hover{
     <svg class="icon" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.87 9.87 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.13-2.9-7-1.88-1.88-4.36-2.93-7.02-2.93zm0 1.67c2.21 0 4.29.86 5.85 2.42a8.18 8.18 0 0 1 2.42 5.83c0 4.55-3.71 8.26-8.27 8.26a8.27 8.27 0 0 1-4.21-1.15l-.3-.18-3.12.82.83-3.04-.2-.32a8.2 8.2 0 0 1-1.26-4.39c0-4.56 3.71-8.25 8.26-8.25zm-4.6 4.7c-.16 0-.42.06-.64.31-.22.25-.86.84-.86 2.03 0 1.19.86 2.34.98 2.5.13.16 1.74 2.66 4.31 3.74 2.13.89 2.56.71 3.03.67.46-.04 1.5-.61 1.71-1.21.21-.6.21-1.11.15-1.21-.06-.1-.23-.16-.48-.28-.25-.13-1.5-.74-1.74-.82-.23-.09-.4-.13-.57.13-.17.25-.65.82-.8 1-.15.16-.3.18-.55.06-.25-.13-1.07-.4-2.04-1.26-.75-.67-1.26-1.5-1.41-1.75-.15-.25-.02-.39.11-.53.13-.13.29-.34.43-.5.13-.17.18-.29.27-.48.09-.19.04-.35-.04-.49-.08-.13-.6-1.47-.82-2-.2-.49-.4-.43-.55-.44z"/></svg>
 </a>
 
-<!-- Footer -->
+<!-- Footer — light -->
 <footer>
     <div class="container">
         <div class="footer-grid">
